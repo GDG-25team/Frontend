@@ -100,8 +100,8 @@ export default function NoticeDetail() {
                             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:opacity-90 transition-colors"
                             onClick={() => window.print()}
                         >
-                            인쇄하기
-                        </button>
+                            작성하기
+                        </button>ㅌ``
                         <button 
                             className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:opacity-90 transition-colors"
                             onClick={() => window.history.back()}
