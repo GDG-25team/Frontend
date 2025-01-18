@@ -1,16 +1,28 @@
 import React, { useState } from 'react';
 import { SpeakerWaveIcon } from '@heroicons/react/24/outline';
-import { useTextToSpeech } from './TextToSpeech';
-import SpeechRecognition from './SpeechToText';
+import { useTextToSpeech } from '../TextToSpeech';
+import SpeechRecognition from '../SpeechToText';
+import axios from 'axios';
 
-export default function Resume() {
+export default function Intro() {
   const { speak, stop } = useTextToSpeech();
-  const questionTitle = "주요 경력 사항이 어떻게 되세요?";
+  const questionTitle = "자기소개 해주세요";
   const [isListening, setIsListening] = useState(false);
-  const [answer, setAnswer] = useState("ex) 나는 20년 동안 벼농사를 했지, 그러나 최근에는 컴퓨터 프로그래밍을 배웠어요.");
-
+  const [answer, setAnswer] = useState("ex) 0년간 해바라기 정육식당을 운영해온 박순자에요. 30년간 10번도 쉬지 않고 식당을 운영해 우리 자식들을 키워왔어요. 식당을 둘째에게 물려주고 이제는 노인일자리에서 성실하게 근로하면서 친구를 사귀고 싶어요....");
   const handleSpeechResult = (text) => {
     setAnswer(text);
+  };
+
+  const sendCareer = async () => {
+    try {
+      const response = await axios.post('http://localhost:8080/api/v1/resume/intro', {
+        text: answer
+      });
+      console.log(response.data);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -37,21 +49,25 @@ export default function Resume() {
               {answer}
             </p>
 
-            {/* 답변 버튼 */}
-            <div className="flex justify-end">
+            {/* 답변 버튼들 */}
+            <div className="flex justify-center space-x-4">
               <button 
                 className={`px-6 py-2 ${isListening ? 'bg-red-600' : 'bg-blue-600'} text-white rounded-lg hover:opacity-90 transition-colors`}
                 onClick={() => setIsListening(!isListening)}
               >
                 {isListening ? '답변 중지' : '답변하기'}
               </button>
-            </div>
-            <div className="flex justify-end">
               <button 
-                className={`px-6 py-2 ${isListening ? 'bg-red-600' : 'bg-blue-600'} text-white rounded-lg hover:opacity-90 transition-colors`}
+                className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:opacity-90 transition-colors"
                 onClick={() => setAnswer('')}
               >
                 다시하기
+              </button>
+              <button 
+                className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:opacity-90 transition-colors"
+                onClick={() => sendCareer()}
+              >
+                다음
               </button>
             </div>
           </div>
