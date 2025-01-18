@@ -11,38 +11,51 @@ export default function NoticeDetail() {
     const [error, setError] = useState(null);
 
     // 더미 데이터
-    const dummyData = {
-        resultCode: 200,
-        resultData: {
-            title: "노인일자리 참여자 모집",
-            activity_schedule: "월~금 09:00-18:00",
-            activity_allowance: "시급 9,620원",
-            eligibility_criteria: "만 65세 이상 기초연금수급자",
-            eligibility_exception: "국민기초생활보장법에 의한 생계급여 수급자",
-            selection_criteria: "연령, 세대구성, 경력 등을 고려하여 선발",
-            required_documents: "신분증, 주민등록등본, 기초연금수급자 확인서",
-            application_location: "서울특별시 중구 을지로 1가 100번지"
-        }
-    };
+    // const dummyData = {
+    //     resultCode: 200,
+    //     resultData: {
+    //         title: "노인일자리 참여자 모집",
+    //         activity_schedule: "월~금 09:00-18:00",
+    //         activity_allowance: "시급 9,620원",
+    //         eligibility_criteria: "만 65세 이상 기초연금수급자",
+    //         eligibility_exception: "국민기초생활보장법에 의한 생계급여 수급자",
+    //         selection_criteria: "연령, 세대구성, 경력 등을 고려하여 선발",
+    //         required_documents: "신분증, 주민등록등본, 기초연금수급자 확인서",
+    //         application_location: "서울특별시 중구 을지로 1가 100번지"
+    //     }
+    // };
 
     useEffect(() => {
         const fetchNoticeDetail = async () => {
             try {
-                // 실제 API 연동 시 사용할 코드
-                const response = await axios.get(`/api/v1/notices/${id}`);
-                setNotice(response.data.resultData);
-                
-                // 더미 데이터 사용
-                // setNotice(dummyData.resultData);
+                const response = await fetch(`/api/v1/notices/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                console.log('Notice Detail Data:', data);
+                if (data.resultCode === 200) {
+                    setNotice(data.resultData);
+                }
                 setLoading(false);
             } catch (err) {
-                setError('공고 상세 정보를 불러오는데 실패했습니다.');
+                setError('공지사항을 불러오는데 실패했습니다.');
                 setLoading(false);
                 console.error('Error fetching notice detail:', err);
             }
         };
 
-        fetchNoticeDetail();
+        if (id) {
+            fetchNoticeDetail();
+        }
     }, [id]);
 
     if (loading) {

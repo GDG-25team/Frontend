@@ -10,9 +10,8 @@ export default function Notices() {
     useEffect(() => {
         const fetchNotices = async () => {
             try {
-                const response = await fetch('http://be.baekya.yebinchoi.me:8080/api/v1/notices', {
+                const response = await fetch('/api/v1/notices', {
                     method: 'GET',
-                    credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
@@ -24,8 +23,9 @@ export default function Notices() {
                 }
 
                 const data = await response.json();
+                console.log(data);
                 if (data.resultCode === 200) {
-                    setNotices(data.resultData.notices);
+                    setNotices(data.resultData);
                 }
                 setLoading(false);
             } catch (err) {
@@ -74,8 +74,8 @@ export default function Notices() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {notices.map((notice) => (
                         <div
-                            key={notice.titleId}
-                            onClick={() => handleNoticeClick(notice.titleId)}
+                            key={notice.id}
+                            onClick={() => handleNoticeClick(notice.id)}
                             className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer"
                         >
                             <h2 className="text-xl font-bold text-gray-900 mb-2">

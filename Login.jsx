@@ -4,7 +4,7 @@ import axios from "axios";
 
 const Login = () => {
     const REST_API_KEY = '29b815bb1d6e2bfd10a26226a842d588';
-    const REDIRECT_URI = 'http://localhost:3000/login';
+    const REDIRECT_URI = 'https://resplendent-souffle-c434e3.netlify.app/login';
     const navigate = useNavigate();
     const location = useLocation();
 
