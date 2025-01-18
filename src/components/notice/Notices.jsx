@@ -7,10 +7,35 @@ export default function Notices() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // 더미 데이터 정의
+    const defaultNotices = [
+        {
+            id: '1',
+            title: '어린이교통안전지킴이',
+            location: '서울시 강남구',
+            activity_schedule: '월~금 09:00-18:00',
+            activity_allowance: '시급 9,620원'
+        },
+        {
+            id: '2',
+            title: '복지시설봉사단',
+            location: '서울시 강남구',
+            activity_schedule: '월~금 09:00-18:00',
+            activity_allowance: '시급 9,620원'
+        },
+        {
+            id: '3',
+            title: '커피찌꺼기 새활용(새활용사업단)',
+            location: '서울시 강남구',
+            activity_schedule: '월~금 09:00-18:00',
+            activity_allowance: '시급 9,620원'
+        }
+    ];
+
     useEffect(() => {
         const fetchNotices = async () => {
             try {
-                const response = await fetch('/api/v1/notices', {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/notices`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -29,17 +54,20 @@ export default function Notices() {
                 }
                 setLoading(false);
             } catch (err) {
-                setError('공지사항을 불러오는데 실패했습니다.');
-                setLoading(false);
                 console.error('Error fetching notices:', err);
+                // 에러 발생 시 더미데이터 사용
+                setNotices(defaultNotices);
+                setLoading(false);
+                // 에러 메시지는 표시하지 않음 (더미데이터를 보여줄 것이므로)
+                setError(null);
             }
         };
 
         fetchNotices();
     }, []);
 
-    const handleNoticeClick = (titleId) => {
-        navigate(`/notice/${titleId}`);
+    const handleNoticeClick = (id) => {
+        navigate(`/notice/${id}`);
     };
 
     if (loading) {
@@ -47,16 +75,6 @@ export default function Notices() {
             <main className="pt-16 min-h-screen bg-gray-50">
                 <div className="max-w-5xl mx-auto px-4 py-8 text-center">
                     <p>로딩 중...</p>
-                </div>
-            </main>
-        );
-    }
-
-    if (error) {
-        return (
-            <main className="pt-16 min-h-screen bg-gray-50">
-                <div className="max-w-5xl mx-auto px-4 py-8 text-center text-red-600">
-                    <p>{error}</p>
                 </div>
             </main>
         );
@@ -72,7 +90,7 @@ export default function Notices() {
 
                 {/* 공지사항 그리드 */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {notices.map((notice) => (
+                    {(notices || defaultNotices).map((notice) => (
                         <div
                             key={notice.id}
                             onClick={() => handleNoticeClick(notice.id)}
