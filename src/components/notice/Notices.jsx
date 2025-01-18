@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 export default function Notices() {
     const navigate = useNavigate();
@@ -11,9 +10,22 @@ export default function Notices() {
     useEffect(() => {
         const fetchNotices = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/v1/notices');
-                if (response.data.resultCode === 200) {
-                    setNotices(response.data.resultData.notices);
+                const response = await fetch('http://be.baekya.yebinchoi.me:8080/api/v1/notices', {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                if (data.resultCode === 200) {
+                    setNotices(data.resultData.notices);
                 }
                 setLoading(false);
             } catch (err) {

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -9,28 +9,35 @@ const Login = () => {
     const location = useLocation();
 
     useEffect(() => {
-        const code = new URLSearchParams(location.search).get("code");
-        if (code) {
-            handleKakaoLogin(code);
-        }
-    }, [location]);
+        const fetchCode = async () => {
+            const code = new URLSearchParams(location.search).get("code");
+            if (code) {
+                handleKakaoLogin(code);
+            }
+        };
+        
+        fetchCode();
+    }, [location, handleKakaoLogin]);
 
-    const handleKakaoLogin = async (code) => {
+    const handleKakaoLogin = useCallback(async (code) => {
         try {
-            const response = await axios({
-                method: 'post',
-                url: '/api/v1/auth/signup',
-                data: { code },
+            const response = await fetch('http://be.baekya.yebinchoi.me:8080/api/v1/auth/signup', {
+                method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
-                }
+                },
+                body: JSON.stringify({ code })
             });
 
-            console.log('Server Response:', response);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
 
-            if (response.data.resultCode === 200) {
-                localStorage.setItem('token', response.data.token);
+            const data = await response.json();
+            if (data.resultCode === 200) {
+                localStorage.setItem('token', data.token);
                 navigate('/notice');
             }
         } catch (error) {
@@ -46,7 +53,7 @@ const Login = () => {
                 alert('로그인 처리 중 오류가 발생했습니다.');
             }
         }
-    };
+    }, [navigate]);
 
     const handleLogin = () => {
         const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;

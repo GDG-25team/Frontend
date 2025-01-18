@@ -20,7 +20,7 @@ const Login = () => {
         try {
             const response = await axios({
                 method: 'post',
-                url: 'http://be.baekya.yebinchoi.me:8080/api/v1/auth/signup',
+                url: 'http://localhost:8080/api/v1/auth/signup',
                 code: { code },
                 headers: {
                     'Content-Type': 'application/json',

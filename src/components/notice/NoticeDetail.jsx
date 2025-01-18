@@ -29,11 +29,11 @@ export default function NoticeDetail() {
         const fetchNoticeDetail = async () => {
             try {
                 // 실제 API 연동 시 사용할 코드
-                // const response = await axios.get(`http://localhost:8080/api/v1/notices/${id}`);
-                // setNotice(response.data.resultData);
+                const response = await axios.get(`/api/v1/notices/${id}`);
+                setNotice(response.data.resultData);
                 
                 // 더미 데이터 사용
-                setNotice(dummyData.resultData);
+                // setNotice(dummyData.resultData);
                 setLoading(false);
             } catch (err) {
                 setError('공고 상세 정보를 불러오는데 실패했습니다.');
