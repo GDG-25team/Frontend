@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { SpeakerWaveIcon } from '@heroicons/react/24/outline';
+import { useTextToSpeech } from '../TextToSpeech';
 
 export default function NoticeDetail() {
     const { id } = useParams();
@@ -68,9 +70,18 @@ export default function NoticeDetail() {
             <div className="max-w-5xl mx-auto px-4 py-8">
                 <div className="bg-white rounded-lg shadow-md p-8">
                     {/* 제목 */}
-                    <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-                        {notice.title}
-                    </h1>
+                    <div className="flex items-center justify-center space-x-2 mb-8">
+                        <h1 className="text-3xl font-bold text-gray-900">
+                            {notice.title}
+                        </h1>
+                        <button 
+                            className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                            onClick={() => 
+                                (notice.title)}
+                        >
+                            <SpeakerWaveIcon className="h-6 w-6 text-gray-600" />
+                        </button>
+                    </div>
 
                     {/* 상세 정보 */}
                     <div className="space-y-6">
@@ -106,11 +117,25 @@ export default function NoticeDetail() {
 
 // 정보 섹션 컴포넌트
 function InfoSection({ title, content }) {
+    const { speak, stop } = useTextToSpeech();
+    
+    const handleSpeak = () => {
+        speak(`${title}, ${content}`);
+    };
+
     return (
         <div className="border-b pb-4">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">
-                {title}
-            </h2>
+            <div className="flex items-center space-x-2 mb-2">
+                <h2 className="text-lg font-semibold text-gray-900">
+                    {title}
+                </h2>
+                <button 
+                    className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                    onClick={handleSpeak}
+                >
+                    <SpeakerWaveIcon className="h-5 w-5 text-gray-600" />
+                </button>
+            </div>
             <p className="text-gray-700">
                 {content}
             </p>

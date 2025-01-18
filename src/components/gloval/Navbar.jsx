@@ -6,7 +6,7 @@ export default function Navbar() {
       <div className="max-w-5xl mx-auto px-4 h-full flex items-center justify-center">
         <div className="flex items-center space-x-2">
           <Link to="/">
-            <img src="/logo512.png" alt="로고" className="h-8 w-auto"/>
+            <img src="/logo123.png" alt="로고" className="h-14 w-auto"/>
           </Link>
         </div>
       </div>
