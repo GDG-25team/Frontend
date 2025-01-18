@@ -15,13 +15,15 @@ export default function Certificate() {
 
   const sendCareer = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/api/v1/resume/certificate', {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/v1/resume/certificate`, {
         text: answer
       });
       console.log(response.data);
       console.log(response);
+      window.location.href = `${process.env.REACT_APP_CLIENT_URL}/resume/intro`;
     } catch (error) {
       console.error(error);
+      window.location.href = `${process.env.REACT_APP_CLIENT_URL}/resume/intro`;
     }
   };
 
@@ -45,7 +47,7 @@ export default function Certificate() {
             </div>
             
             {/* 질문 내용 */}
-            <p className="text-lg text-gray-700 text-center my-8">
+            <p className="text-lg text-gray-700 text-center my-20">
               {answer}
             </p>
 

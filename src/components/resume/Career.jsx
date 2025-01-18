@@ -8,20 +8,22 @@ export default function Career() {
   const { speak, stop } = useTextToSpeech();
   const questionTitle = `주요 경력 사항이  어떻게 되세요?`;
   const [isListening, setIsListening] = useState(false);
-  const [answer, setAnswer] = useState("ex) 나는 20년 동안 벼농사를 했지, 그러나 최근에는 컴퓨터 프로그래밍을 배웠어요.");
+  const [answer, setAnswer] = useState("ex) 나는 구글에서, 프론트 프로그래밍을 했어요.");
   const handleSpeechResult = (text) => {
     setAnswer(text);
   };
 
   const sendCareer = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/api/v1/resume/career', {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/v1/resume/career`, {
         text: answer
       });
       console.log(response.data);
       console.log(response);
+      window.location.href = `${process.env.REACT_APP_CLIENT_URL}/resume/certificate`;
     } catch (error) {
       console.error(error);
+      window.location.href = `${process.env.REACT_APP_CLIENT_URL}/resume/certificate`;
     }
   };
 

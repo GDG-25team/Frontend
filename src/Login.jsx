@@ -5,7 +5,7 @@ import LogoWithTitle from './components/gloval/LogoWithTitle';
 
 const Login = () => {
     const REST_API_KEY = '29b815bb1d6e2bfd10a26226a842d588';
-    const REDIRECT_URI = 'http://localhost:3000/login';
+    const REDIRECT_URI = `${process.env.REACT_APP_CLIENT_URL}/login`;
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -20,7 +20,7 @@ const Login = () => {
         try {
             const response = await axios({
                 method: 'post',
-                url: 'http://localhost:8080/api/v1/auth/signup',
+                url: `${process.env.REACT_APP_API_URL}/api/v1/auth/signup`,
                 code: { code },
                 headers: {
                     'Content-Type': 'application/json',
@@ -37,11 +37,9 @@ const Login = () => {
         } catch (error) {
             console.error('Login error:', error);
             if (error.response) {
-                console.error('Error response:', error.response);
                 alert(`로그인 실패: ${error.response.data.message || '알 수 없는 오류가 발생했습니다.'}`);
             } else if (error.request) {
-                console.error('Error request:', error.request);
-                alert('서버와 통신할 수 없습니다. 네트워크 연결을 확인해주세요.');
+                window.location.href = `${process.env.REACT_APP_CLIENT_URL}/notice`;
             } else {
                 console.error('Error message:', error.message);
                 alert('로그인 처리 중 오류가 발생했습니다.');

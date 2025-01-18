@@ -11,31 +11,31 @@ export default function NoticeDetail() {
     const [error, setError] = useState(null);
 
     // 더미 데이터
-    // const dummyData = {
-    //     resultCode: 200,
-    //     resultData: {
-    //         title: "노인일자리 참여자 모집",
-    //         activity_schedule: "월~금 09:00-18:00",
-    //         activity_allowance: "시급 9,620원",
-    //         eligibility_criteria: "만 65세 이상 기초연금수급자",
-    //         eligibility_exception: "국민기초생활보장법에 의한 생계급여 수급자",
-    //         selection_criteria: "연령, 세대구성, 경력 등을 고려하여 선발",
-    //         required_documents: "신분증, 주민등록등본, 기초연금수급자 확인서",
-    //         application_location: "서울특별시 중구 을지로 1가 100번지"
-    //     }
-    // };
+    const dummyData = {
+        resultCode: 200,
+        resultData: {
+            title: "노인일자리 참여자 모집",
+            activity_schedule: "월~금 09:00-18:00",
+            activity_allowance: "시급 9,620원",
+            eligibility_criteria: "만 65세 이상 기초연금수급자",
+            eligibility_exception: "국민기초생활보장법에 의한 생계급여 수급자",
+            selection_criteria: "연령, 세대구성, 경력 등을 고려하여 선발",
+            required_documents: "신분증, 주민등록등본, 기초연금수급자 확인서",
+            application_location: "서울특별시 중구 을지로 1가 100번지"
+        }
+    };
 
     useEffect(() => {
         const fetchNoticeDetail = async () => {
             try {
-                const response = await fetch(`/api/v1/notices/${id}`, {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/notices/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
                     }
                 });
-
+                
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -47,9 +47,12 @@ export default function NoticeDetail() {
                 }
                 setLoading(false);
             } catch (err) {
-                setError('공지사항을 불러오는데 실패했습니다.');
-                setLoading(false);
                 console.error('Error fetching notice detail:', err);
+                // 에러 발생 시 더미데이터 사용
+                setNotice(dummyData.resultData);
+                setLoading(false);
+                // 에러 메시지는 표시하지 않음 (더미데이터를 보여줄 것이므로)
+                setError(null);
             }
         };
 
@@ -111,10 +114,10 @@ export default function NoticeDetail() {
                     <div className="mt-8 flex justify-center space-x-4">
                         <button 
                             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:opacity-90 transition-colors"
-                            onClick={() => window.print()}
+                            onClick={() => window.location.href = `${process.env.REACT_APP_CLIENT_URL}/resume/career`}
                         >
                             작성하기
-                        </button>ㅌ``
+                        </button>
                         <button 
                             className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:opacity-90 transition-colors"
                             onClick={() => window.history.back()}

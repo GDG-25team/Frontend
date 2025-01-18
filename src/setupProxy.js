@@ -4,15 +4,11 @@ module.exports = function(app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: 'http://be.baekya.yebinchoi.me:8080',
+      target: process.env.REACT_APP_API_URL,
       changeOrigin: true,
       pathRewrite: {
         '^/api': '/api'
-      },
-      onError: (err, req, res) => {
-        console.error('Proxy Error:', err);
-      },
-      logLevel: 'debug'
+      }
     })
   );
 

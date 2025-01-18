@@ -1,155 +1,100 @@
-import React from 'react';
-import { SpeakerWaveIcon } from '@heroicons/react/24/outline';
-import { useTextToSpeech } from '../TextToSpeech';
-
-// 정보 섹션 컴포넌트
-function InfoSection({ title, content }) {
-    const { speak, stop } = useTextToSpeech();
-    
-    const handleSpeak = () => {
-        speak(`${title}, ${content}`);
-    };
-
-    return (
-        <div className="border-b pb-4">
-            <div className="flex items-center space-x-2 mb-2">
-                <h2 className="text-lg font-semibold text-gray-900">
-                    {title}
-                </h2>
-                <button 
-                    className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-                    onClick={handleSpeak}
-                >
-                    <SpeakerWaveIcon className="h-5 w-5 text-gray-600" />
-                </button>
-            </div>
-            <p className="text-gray-700 whitespace-pre-line">
-                {content}
-            </p>
-        </div>
-    );
-}
-
-// 자격증 섹션 컴포넌트 추가
-function LicenseSection({ title, licenses }) {
-    const { speak } = useTextToSpeech();
-    
-    const handleSpeak = () => {
-        const licenseText = licenses.map(license => 
-            `${license.name}, 취득일: ${license.date}`
-        ).join(', ');
-        speak(`${title}, ${licenseText}`);
-    };
-
-    return (
-        <div className="border-b pb-4">
-            <div className="flex items-center space-x-2 mb-4">
-                <h2 className="text-lg font-semibold text-gray-900">
-                    {title}
-                </h2>
-                <button 
-                    className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-                    onClick={handleSpeak}
-                >
-                    <SpeakerWaveIcon className="h-5 w-5 text-gray-600" />
-                </button>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {licenses.map((license, index) => (
-                    <div 
-                        key={index} 
-                        className="bg-gray-50 p-4 rounded-lg hover:shadow-md transition-shadow"
-                    >
-                        <p className="font-semibold text-gray-900">{license.name}</p>
-                        <p className="text-gray-600 text-sm mt-1">취득일: {license.date}</p>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-}
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 export default function Result() {
-    const { speak } = useTextToSpeech();
-    
-    // 예시 데이터 (실제로는 props나 API로 받아올 것입니다)
-    const resultData = {
-        carrer: [{
-            companyName: "구글",
-            work: "판매원",
-            date: "2024년 1월 15일부터 2024년 2월 25일까지"
-        }],
-        license: [{
-            name: "정보처리기사",
-            date: "2024-01-18"
-        },
-        {
-            name: "SQLD",
-            date: "2024-01-15"
-        }],
-        introduction: "안녕하세요, 저는 올해 68세로 평생 지역 식당을 운영하며 사람들과 함께 성장해 온 박순자입니다..."
+    const [resumeData, setResumeData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    // 기본 더미 데이터 정의
+    const defaultResumeData = {
+        intro: "안녕하세요. 저는 30년간 개발을 한 프론트 개발자 입니다.",
+        career: "- 구글 개발자\n- 프론트개발\n",
+        certificate: "- 정보처리기사\n- SQLD"
     };
+    const submitResume = () => {
+        alert("제출되었습니다.");
+        window.location.href = `${process.env.REACT_APP_CLIENT_URL}/notice`;
+
+    }
+
+    useEffect(() => {
+        const fetchResumeData = async () => {
+            try {
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/resume`);
+                if (response.data.resultCode === 200) {
+                    setResumeData(response.data.resultData);
+                } else {
+                    throw new Error('Failed to fetch resume data');
+                }
+            } catch (error) {
+                console.error('Error fetching resume:', error);
+                // 에러 발생 시 기본 데이터 사용
+                setResumeData(defaultResumeData);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchResumeData();
+    }, []);
+
+    if (loading) {
+        return (
+            <main className="pt-16 min-h-screen bg-gray-50">
+                <div className="max-w-5xl mx-auto px-4 py-8 text-center">
+                    <p>이력서를 생성하고 있습니다...</p>
+                </div>
+            </main>
+        );
+    }
 
     return (
         <main className="pt-16 min-h-screen bg-gray-50">
             <div className="max-w-5xl mx-auto px-4 py-8">
-                <div className="bg-white rounded-lg shadow-md p-6 min-h-[calc(100vh-8rem)]">
-                    <div className="flex flex-col justify-between h-full">
-                        {/* 제목 */}
-                        <div className="flex items-center justify-center space-x-2 mb-8">
-                            <h1 className="text-3xl font-bold text-gray-900">이력서 결과</h1>
-                            <button 
-                                className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-                                onClick={() => speak("이력서 결과")}
-                            >
-                                <SpeakerWaveIcon className="h-6 w-6 text-gray-600" />
-                            </button>
-                        </div>
+                <div className="bg-white rounded-lg shadow-md p-8">
+                    {/* 제목 */}
+                    <h1 className="text-3xl font-bold text-center text-gray-900 mb-8">
+                        이력서
+                    </h1>
 
-                        {/* 내용 */}
-                        <div className="space-y-6 flex-grow">
-                            {/* 경력 사항 */}
-                            <div className="space-y-4 mb-8">
-                                <InfoSection 
-                                    title="경력 사항" 
-                                    content={resultData.carrer.map(career => 
-                                        `${career.companyName}에서 ${career.work}으로 ${career.date} 근무`
-                                    ).join('\n')} 
-                                />
-                            </div>
+                    {/* 자기소개 */}
+                    <section className="mb-8">
+                        <h2 className="text-xl font-semibold text-gray-900 mb-4">자기소개</h2>
+                        <p className="text-gray-700 whitespace-pre-line">
+                            {resumeData?.intro || defaultResumeData.intro}
+                        </p>
+                    </section>
 
-                            {/* 자격증 */}
-                            <div className="space-y-4 mb-8">
-                                <LicenseSection 
-                                    title="자격증" 
-                                    licenses={resultData.license}
-                                />
-                            </div>
+                    {/* 경력사항 */}
+                    <section className="mb-8">
+                        <h2 className="text-xl font-semibold text-gray-900 mb-4">경력사항</h2>
+                        <p className="text-gray-700 whitespace-pre-line">
+                            {resumeData?.career || defaultResumeData.career}
+                        </p>
+                    </section>
 
-                            {/* 자기소개 */}
-                            <div className="space-y-4">
-                                <InfoSection 
-                                    title="자기소개" 
-                                    content={resultData.introduction} 
-                                />
-                            </div>
-                        </div>
+                    {/* 자격증 */}
+                    <section className="mb-8">
+                        <h2 className="text-xl font-semibold text-gray-900 mb-4">자격증</h2>
+                        <p className="text-gray-700 whitespace-pre-line">
+                            {resumeData?.certificate || defaultResumeData.certificate}
+                        </p>
+                    </section>
 
-                        {/* 버튼 */}
-                        <div className="mt-8 flex justify-center space-x-4">
-                            <button 
-                                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:opacity-90 transition-colors"
-                                onClick={() => window.print()}
-                            >
-                                인쇄하기
-                            </button>
-                            <button 
-                                className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:opacity-90 transition-colors"
-                                onClick={() => window.location.href = '/'}
-                            >
-                                처음으로
-                            </button>
-                        </div>
+                    {/* 버튼 */}
+                    <div className="flex justify-center space-x-4">
+                        <button 
+                            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:opacity-90 transition-colors"
+                            onClick={() => submitResume()}
+                        >
+                            제출하기
+                        </button>
+                        <button 
+                            className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:opacity-90 transition-colors"
+                            onClick={() => window.history.back()}
+                        >
+                            돌아가기
+                        </button>
                     </div>
                 </div>
             </div>

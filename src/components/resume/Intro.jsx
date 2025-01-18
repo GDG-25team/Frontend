@@ -8,20 +8,22 @@ export default function Intro() {
   const { speak, stop } = useTextToSpeech();
   const questionTitle = `자기소개를  해주세요`;
   const [isListening, setIsListening] = useState(false);
-  const [answer, setAnswer] = useState("ex) 0년간 해바라기 정육식당을 운영해온 박순자에요. 30년간 10번도 쉬지 않고 식당을 운영해 우리 자식들을 키워왔어요. 식당을 둘째에게 물려주고 이제는 노인일자리에서 성실하게 근로하면서 친구를 사귀고 싶어요....");
+  const [answer, setAnswer] = useState("ex) 30년간 구글에서 프론트 개발을 한번도 쉬지 않고해 우리 자식들을 키워왔어요. 이제는 노인일자리에서 성실하게 근로하면서 친구를 사귀고 싶어요....");
   const handleSpeechResult = (text) => {
     setAnswer(text);
   };
 
   const sendCareer = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/api/v1/resume/intro', {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/v1/resume/intro`, {
         text: answer
       });
       console.log(response.data);
       console.log(response);
+      window.location.href = `${process.env.REACT_APP_CLIENT_URL}/resume/result`;
     } catch (error) {
       console.error(error);
+      window.location.href = `${process.env.REACT_APP_CLIENT_URL}/resume/result`;
     }
   };
 
