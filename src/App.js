@@ -1,18 +1,24 @@
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import LogoWithTitle from './components/gloval/LogoWithTitle';
+
 function App() {
-  return (
-    <>
-      <main className="relative pt-16 min-h-screen">
-        <div className="max-w-5xl mx-auto px-4 py-8">
-          <div className="relative">
-            <h1 className="text-[40px] font-bold text-black">어르신 희망터</h1>
-          </div>
-          <p className="text-center text-gray-600 mt-8">
-            상단의 로고를 클릭하여 질문 페이지로 이동하세요.
-          </p>
-        </div>
-      </main>
-    </>
-  );
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const redirectTimeout = setTimeout(() => {
+            navigate('/login');
+        }, 3000);  // 타이핑 효과 + 대기 시간
+        return () => clearTimeout(redirectTimeout);
+    }, [navigate]);
+
+    return (
+        <main className="min-h-screen bg-white flex flex-col items-center justify-center">
+            <div className="text-center">
+                <LogoWithTitle animate={true} />
+            </div>
+        </main>
+    );
 }
 
 export default App;
