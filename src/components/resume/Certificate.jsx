@@ -6,7 +6,7 @@ import axios from 'axios';
 
 export default function Certificate() {
   const { speak, stop } = useTextToSpeech();
-  const questionTitle = "자격증을 가지고 계세요?";
+  const questionTitle = `보유하신 자격증이  어떻게 되세요?`;
   const [isListening, setIsListening] = useState(false);
   const [answer, setAnswer] = useState("ex) 나는 뭐 정처기랑 SQLD 있어요");
   const handleSpeechResult = (text) => {
@@ -29,8 +29,8 @@ export default function Certificate() {
     <main className="pt-16 min-h-screen bg-gray-50">
       <div className="max-w-5xl mx-auto px-4 py-8">
         {/* 질문 카드 */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="space-y-6">
+        <div className="bg-white rounded-lg shadow-md p-6 min-h-[calc(100vh-8rem)]">
+          <div className="flex flex-col justify-between h-full">
             {/* 질문 제목 */}
             <div className="flex items-center justify-center space-x-2">
               <h1 className="text-2xl font-bold text-gray-900">
@@ -45,7 +45,7 @@ export default function Certificate() {
             </div>
             
             {/* 질문 내용 */}
-            <p className="text-lg text-gray-700">
+            <p className="text-lg text-gray-700 text-center my-8">
               {answer}
             </p>
 

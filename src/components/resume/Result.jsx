@@ -93,58 +93,63 @@ export default function Result() {
     return (
         <main className="pt-16 min-h-screen bg-gray-50">
             <div className="max-w-5xl mx-auto px-4 py-8">
-                <div className="bg-white rounded-lg shadow-md p-8">
-                    {/* 제목 */}
-                    <div className="flex items-center justify-center space-x-2 mb-8">
-                        <h1 className="text-3xl font-bold text-gray-900">이력서 결과</h1>
-                        <button 
-                            className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-                            onClick={() => speak("이력서 결과")}
-                        >
-                            <SpeakerWaveIcon className="h-6 w-6 text-gray-600" />
-                        </button>
-                    </div>
+                <div className="bg-white rounded-lg shadow-md p-6 min-h-[calc(100vh-8rem)]">
+                    <div className="flex flex-col justify-between h-full">
+                        {/* 제목 */}
+                        <div className="flex items-center justify-center space-x-2 mb-8">
+                            <h1 className="text-3xl font-bold text-gray-900">이력서 결과</h1>
+                            <button 
+                                className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                                onClick={() => speak("이력서 결과")}
+                            >
+                                <SpeakerWaveIcon className="h-6 w-6 text-gray-600" />
+                            </button>
+                        </div>
 
-                    {/* 경력 사항 */}
-                    <div className="space-y-4 mb-8">
-                        <InfoSection 
-                            title="경력 사항" 
-                            content={resultData.carrer.map(career => 
-                                `${career.companyName}에서 ${career.work}으로 ${career.date} 근무`
-                            ).join('\n')} 
-                        />
-                    </div>
+                        {/* 내용 */}
+                        <div className="space-y-6 flex-grow">
+                            {/* 경력 사항 */}
+                            <div className="space-y-4 mb-8">
+                                <InfoSection 
+                                    title="경력 사항" 
+                                    content={resultData.carrer.map(career => 
+                                        `${career.companyName}에서 ${career.work}으로 ${career.date} 근무`
+                                    ).join('\n')} 
+                                />
+                            </div>
 
-                    {/* 자격증 - 새로운 컴포넌트 사용 */}
-                    <div className="space-y-4 mb-8">
-                        <LicenseSection 
-                            title="자격증" 
-                            licenses={resultData.license}
-                        />
-                    </div>
+                            {/* 자격증 */}
+                            <div className="space-y-4 mb-8">
+                                <LicenseSection 
+                                    title="자격증" 
+                                    licenses={resultData.license}
+                                />
+                            </div>
 
-                    {/* 자기소개 */}
-                    <div className="space-y-4">
-                        <InfoSection 
-                            title="자기소개" 
-                            content={resultData.introduction} 
-                        />
-                    </div>
+                            {/* 자기소개 */}
+                            <div className="space-y-4">
+                                <InfoSection 
+                                    title="자기소개" 
+                                    content={resultData.introduction} 
+                                />
+                            </div>
+                        </div>
 
-                    {/* 버튼 */}
-                    <div className="mt-8 flex justify-center space-x-4">
-                        <button 
-                            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:opacity-90 transition-colors"
-                            onClick={() => window.print()}
-                        >
-                            인쇄하기
-                        </button>
-                        <button 
-                            className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:opacity-90 transition-colors"
-                            onClick={() => window.location.href = '/'}
-                        >
-                            처음으로
-                        </button>
+                        {/* 버튼 */}
+                        <div className="mt-8 flex justify-center space-x-4">
+                            <button 
+                                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:opacity-90 transition-colors"
+                                onClick={() => window.print()}
+                            >
+                                인쇄하기
+                            </button>
+                            <button 
+                                className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:opacity-90 transition-colors"
+                                onClick={() => window.location.href = '/'}
+                            >
+                                처음으로
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

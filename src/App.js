@@ -1,9 +1,6 @@
-import BackgroundDesign from './components/background/BackgroundDesign';
-
 function App() {
   return (
     <>
-      <BackgroundDesign />
       <main className="relative pt-16 min-h-screen">
         <div className="max-w-5xl mx-auto px-4 py-8">
           <div className="relative">
