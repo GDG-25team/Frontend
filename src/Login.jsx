@@ -48,10 +48,10 @@ const Login = () => {
     //     }
     // };
 
-    const handleLogin = () => {
-        const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-        window.location.href = kakaoURL;
-    };
+    // const handleLogin = () => {
+    //     const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+    //     window.location.href = kakaoURL;
+    // };
 
     return (    
         <main className="min-h-screen bg-white flex flex-col items-center justify-center">
@@ -61,7 +61,7 @@ const Login = () => {
                 {/* 카카오 로그인 버튼 */}
                 <div className="mt-8">
                     <button
-                        onClick={window.location.href = `${process.env.REACT_APP_CLIENT_URL}/notice`}
+                        onClick={() => window.location.href = `${process.env.REACT_APP_CLIENT_URL}/notice`}
                         className="flex items-center justify-center bg-[#FEE500] hover:bg-[#FEE500]/90 text-[#391B1B] px-8 py-4 rounded-2xl shadow-md transition-all duration-200 hover:shadow-lg"
                     >
                         <img
